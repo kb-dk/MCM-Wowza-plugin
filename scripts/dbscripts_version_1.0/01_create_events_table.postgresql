@@ -1,0 +1,17 @@
+/*
+ 
+To create the events table, run this file through psql like so: (-f : Get queries from file)
+
+psql -h localhost -d chaos-streaming-server-log -U postgres -W -f 01_create_events_table.postgresql
+
+*/
+
+CREATE TABLE events (
+	event_id INTEGER NOT NULL, 
+	timestamp TIMESTAMP, 
+	stream_name VARCHAR, 
+	event_type VARCHAR, 
+	user_id INTEGER, 
+	started_at INTEGER, 
+	ended_at INTEGER, 
+	PRIMARY KEY (event_id));
