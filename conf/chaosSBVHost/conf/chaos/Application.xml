@@ -123,6 +123,11 @@
 				<Class>dk.statsbiblioteket.chaos.wowza.plugin.authentication.WowzaSessionAuthenticationModuleBase</Class>
 			</Module>
 			<Module>
+				<Name>Chaos-BES-Filemapping</Name>
+				<Description>Statsbiblioteket Chaos BES file mapping module</Description>
+				<Class>dk.statsbiblioteket.chaos.wowza.plugin.bes.BesModuleBase</Class>
+			</Module>
+			<Module>
 				<Name>Chaos-SB-Logging</Name>
 				<Description>Statsbiblioteket Chaos logging module</Description>
 				<Class>dk.statsbiblioteket.chaos.wowza.plugin.statistic.StatisticLoggingSBModuleBase</Class>

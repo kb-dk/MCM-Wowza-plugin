@@ -1,4 +1,4 @@
-package dk.statsbiblioteket.chaos.wowza.plugin.authentication;
+package dk.statsbiblioteket.chaos.wowza.plugin.bes;
 
 import java.io.File;
 import java.util.regex.Matcher;

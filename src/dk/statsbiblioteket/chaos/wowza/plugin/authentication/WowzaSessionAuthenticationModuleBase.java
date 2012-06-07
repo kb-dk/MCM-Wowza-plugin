@@ -1,12 +1,8 @@
 package dk.statsbiblioteket.chaos.wowza.plugin.authentication;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.logging.Logger;
 
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.WebResource;
 import com.wowza.wms.application.*;
 import com.wowza.wms.amf.*;
 import com.wowza.wms.client.*;
@@ -21,11 +17,8 @@ import dk.statsbiblioteket.chaos.wowza.plugin.util.ConfigReader;
 public class WowzaSessionAuthenticationModuleBase extends ModuleBase 
              implements IModuleOnApp, IModuleOnConnect, IModuleOnStream, IModuleOnCall {
 
-	private static String propertyFilePath = "conf/chaos/chaos-streaming-server-plugin.properties";
-	private static String propertyBESRestURL = "GeneralBESServerURL";
-
-	private static String pluginName = "CHAOS Wowza plugin - Authentication and file location resolver";
-	private static String pluginVersion = "2.0.0 SB DOMS file streaming"; 
+	private static String pluginName = "CHAOS Wowza plugin - Authentication";
+	private static String pluginVersion = "2.1.0 SB DOMS file streaming";
 	
 	public WowzaSessionAuthenticationModuleBase() {
 		super();
@@ -34,21 +27,6 @@ public class WowzaSessionAuthenticationModuleBase extends ModuleBase
 	public void onAppStart(IApplicationInstance appInstance) {
 		getLogger().info("onAppStart: " + pluginName + " version " + pluginVersion);
 		getLogger().info("onAppStart: VHost home path: " + appInstance.getVHost().getHomePath());
-        String vhostDir = appInstance.getVHost().getHomePath();
-        String storageDir = appInstance.getStreamStorageDir();
-		// Setup file mapper
-		try {
-			IMediaStreamFileMapper defaultMapper = appInstance.getStreamFileMapper();
-			ConfigReader cr = new ConfigReader(new File(vhostDir + "/" + propertyFilePath));
-			WebResource besRestApi = Client.create().resource(cr.get(propertyBESRestURL, "missing-bes-service-location-in-property-file"));
-			getLogger().info("onAppStart: Creating DomsShardIdToFileMapper");
-			DomsShardIdToFileMapper domsShardIdToFileMapper = new DomsShardIdToFileMapper(defaultMapper, storageDir, besRestApi);
-			// Set File mapper
-			appInstance.setStreamFileMapper(domsShardIdToFileMapper);
-		} catch (IOException e) {
-			getLogger().error("Unable to read configuration file", e);
-			throw new RuntimeException("Unable to read configuration file", e);
-		}
 	}
 
 	public void onConnect(IClient client, RequestFunction function,

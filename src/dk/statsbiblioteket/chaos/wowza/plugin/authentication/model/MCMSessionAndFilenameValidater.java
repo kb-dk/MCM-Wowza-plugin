@@ -143,7 +143,8 @@ public class MCMSessionAndFilenameValidater implements SessionAndFilenameValidat
         return isAllowedToStream;
 	}
 
-	protected boolean validateFilerequestWithMCMResult(String requestedPathAndFilename, List<String> mcmFilenames) {
+	protected boolean validateFilerequestWithMCMResult(
+			String requestedPathAndFilename, List<String> mcmFilenames) {
 		// Defualt with unix style path separator
 		String filename = getFilenameUsingSeparator(requestedPathAndFilename, "/");
 		boolean filenameEquals = mcmFilenames.contains(filename);
