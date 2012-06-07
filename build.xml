@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <project name="Chaos-Authentication-Wowza-plugin" default="jar" basedir=".">
 	
-	<!--property name="wowza.install.dir" value="/usr/local/WowzaMediaServer"/--> <!-- Wowza location on Linux -->
-	<property name="wowza.install.dir" value="/Library/WowzaMediaServer"/> <!-- Wowza location on Mac -->
+	<property name="wowza.install.dir" value="/usr/local/WowzaMediaServer"/><!-- Wowza location on Linux -->
+	<!--property name="wowza.install.dir" value="/Library/WowzaMediaServer"/--> <!-- Wowza location on Mac -->
 	<property name="wowza.lib.dir" value="${wowza.install.dir}/lib"/>
 	<property name="jar.filename" value="LARM-CHAOS-Wowza-plugin.jar"/>
 	<property name="test.jar.filename" value="LARM-CHAOS-Wowza-plugin.jar"/>
