@@ -21,9 +21,9 @@ import dk.statsbiblioteket.chaos.wowza.plugin.mockobjects.IClientMock;
 import dk.statsbiblioteket.chaos.wowza.plugin.mockobjects.IMediaStreamMock;
 import dk.statsbiblioteket.chaos.wowza.plugin.mockobjects.MCMPortalInterfaceStatisticsMock;
 import dk.statsbiblioteket.chaos.wowza.plugin.statistic.logger.MCMPortalInterfaceStatisticsImpl;
-import dk.statsbiblioteket.chaos.wowza.plugin.statistic.logger.StreamingEventLogger;
+import dk.statsbiblioteket.chaos.wowza.plugin.statistic.logger.StreamingMCMEventLogger;
 import dk.statsbiblioteket.chaos.wowza.plugin.statistic.logger.StreamingEventLoggerIF;
-import dk.statsbiblioteket.chaos.wowza.plugin.statistic.logger.StreamingEventLoggerTest;
+import dk.statsbiblioteket.chaos.wowza.plugin.statistic.logger.StreamingMCMEventLoggerTest;
 import dk.statsbiblioteket.chaos.wowza.plugin.statistic.logger.StreamingStatLogEntry;
 import dk.statsbiblioteket.chaos.wowza.plugin.statistic.logger.StreamingStatLogEntry.Event;
 
@@ -51,8 +51,8 @@ public class StatisticLoggingStreamListenerTest extends TestCase {
 	        return;
 	    }
 		this.connection = DriverManager.getConnection("jdbc:hsqldb:mem:streamingstats");
-		StreamingEventLogger.createInstanceForTestPurpose(logger, connection, true);
-		this.streamingEventLogger = StreamingEventLogger.getInstance();
+		StreamingMCMEventLogger.createInstanceForTestPurpose(logger, connection);
+		this.streamingEventLogger = StreamingMCMEventLogger.getInstance();
 	}
 
 	@Before
@@ -63,12 +63,12 @@ public class StatisticLoggingStreamListenerTest extends TestCase {
 		IClient client = new IClientMock("sessionID=sample.mp4&objectID=643703&includeFiles=true");
 		IMediaStreamMock mediaStream = new IMediaStreamMock("sample2.mp4", client);
 		statLogSBMediaStreamAcitonNotify = new StatisticLoggingStreamListener(logger, mediaStream, streamingEventLogger);
-		StreamingEventLoggerTest.createDBEventTable(logger, connection);
+		StreamingMCMEventLoggerTest.createDBEventTable(logger, connection);
 	}
 
 	@After
 	public void tearDown() throws Exception {
-		StreamingEventLoggerTest.dropDBTable(logger, connection);
+		StreamingMCMEventLoggerTest.dropDBTable(logger, connection);
 		org.apache.log4j.BasicConfigurator.resetConfiguration();
 	}
 
@@ -83,7 +83,7 @@ public class StatisticLoggingStreamListenerTest extends TestCase {
 		statLogSBMediaStreamAcitonNotify.onPause(mediaStream, true, 0.0);
 		dumpDB2Log(10);
 		// Fetch data
-		StreamingStatLogEntry logEntry = StreamingEventLogger.getInstance().getLogEntryLatest();
+		StreamingStatLogEntry logEntry = StreamingMCMEventLogger.getInstance().getLogEntryLatest();
 		logger.debug("Found log entry : " + logEntry.toString());
 
 		Assert.assertEquals("Result is:", 2, logEntry.getEventID());
@@ -101,7 +101,7 @@ public class StatisticLoggingStreamListenerTest extends TestCase {
 		statLogSBMediaStreamAcitonNotify.onPlay(mediaStream, mediaStream.getName(), 0.0, 0.0, 0);
 		statLogSBMediaStreamAcitonNotify.onStop(mediaStream);
 		// Fetch data
-		StreamingStatLogEntry logEntry = StreamingEventLogger.getInstance().getLogEntryLatest();
+		StreamingStatLogEntry logEntry = StreamingMCMEventLogger.getInstance().getLogEntryLatest();
 		logger.debug("Found log entry: " + logEntry.toString());
 
 		Assert.assertEquals("Result is:", 2, logEntry.getEventID());
@@ -120,7 +120,7 @@ public class StatisticLoggingStreamListenerTest extends TestCase {
 		statLogSBMediaStreamAcitonNotify.onSeek(mediaStream, 0.0);
 		dumpDB2Log(10);
 		// Fetch data
-		StreamingStatLogEntry logEntry = StreamingEventLogger.getInstance().getLogEntryLatest();
+		StreamingStatLogEntry logEntry = StreamingMCMEventLogger.getInstance().getLogEntryLatest();
 		logger.debug("Found log entry: " + logEntry.toString());
 
 		Assert.assertEquals("Result is:", 2, logEntry.getEventID());
@@ -130,12 +130,14 @@ public class StatisticLoggingStreamListenerTest extends TestCase {
 	}
 
 	private void dumpDB2Log(int numberOfEntries) {
-		List<StreamingStatLogEntry> logEntries = ((StreamingEventLogger)StreamingEventLogger.getInstance()).getLogEntryLatest(numberOfEntries);
-		int i=0;
-		logger.debug("Dumping " + logEntries.size() + "/" + numberOfEntries + " entries to the log");
-		for (StreamingStatLogEntry logEntry: logEntries) {
-			logger.debug("Log entry [" + i + "] : " + logEntry.toString());
-			i++;
-		}
+                //TODO: Not for MCM logger
+		//List<StreamingStatLogEntry> logEntries = ((StreamingMCMEventLogger) StreamingMCMEventLogger
+                //        .getInstance()).getLogEntryLatest(numberOfEntries);
+		//int i=0;
+		//logger.debug("Dumping " + logEntries.size() + "/" + numberOfEntries + " entries to the log");
+		//for (StreamingStatLogEntry logEntry: logEntries) {
+		//	logger.debug("Log entry [" + i + "] : " + logEntry.toString());
+		//	i++;
+		//}
 	}
 }

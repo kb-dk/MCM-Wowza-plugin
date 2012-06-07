@@ -27,7 +27,7 @@ import dk.statsbiblioteket.chaos.wowza.plugin.mockobjects.IMediaStreamMock;
 import dk.statsbiblioteket.chaos.wowza.plugin.statistic.StatisticLoggingStreamListener;
 import dk.statsbiblioteket.chaos.wowza.plugin.statistic.logger.StreamingStatLogEntry.Event;
 
-public class StreamingEventLoggerTest {
+public class StreamingMCMEventLoggerTest {
     private static final String DATE_PATTERN = "yyyy-MM-dd HH:mm:ss.SSS";
     public static final SimpleDateFormat sdf = new SimpleDateFormat(DATE_PATTERN);
 
@@ -35,7 +35,7 @@ public class StreamingEventLoggerTest {
 	private Connection connection;
 	private StreamingEventLoggerIF streamingEventLogger;
 
-	public StreamingEventLoggerTest() throws FileNotFoundException, IOException, SQLException {
+	public StreamingMCMEventLoggerTest() throws FileNotFoundException, IOException, SQLException {
 		super();
 		this.logger = WMSLoggerFactory.getLogger(this.getClass());
 		try {
@@ -46,8 +46,8 @@ public class StreamingEventLoggerTest {
 	        return;
 	    }
 		this.connection = DriverManager.getConnection("jdbc:hsqldb:mem:streamingstats");
-		StreamingEventLogger.createInstanceForTestPurpose(logger, connection, true);
-		this.streamingEventLogger = StreamingEventLogger.getInstance();
+		StreamingMCMEventLogger.createInstanceForTestPurpose(logger, connection);
+		this.streamingEventLogger = StreamingMCMEventLogger.getInstance();
 	}
 
 	@Before

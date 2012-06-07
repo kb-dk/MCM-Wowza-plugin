@@ -1,8 +1,5 @@
 package dk.statsbiblioteket.chaos.wowza.plugin.statistic;
 
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-
 import com.wowza.wms.application.IApplicationInstance;
 import com.wowza.wms.application.WMSProperties;
 import com.wowza.wms.module.IModuleOnApp;
@@ -12,19 +9,22 @@ import com.wowza.wms.stream.IMediaStream;
 import com.wowza.wms.stream.IMediaStreamActionNotify;
 
 import dk.statsbiblioteket.chaos.wowza.plugin.statistic.logger.MCMPortalInterfaceStatisticsImpl;
-import dk.statsbiblioteket.chaos.wowza.plugin.statistic.logger.StreamingDatabaseEventLogger;
+import dk.statsbiblioteket.chaos.wowza.plugin.statistic.logger.StreamingMCMEventLogger;
 import dk.statsbiblioteket.chaos.wowza.plugin.util.PropertiesUtil;
 import dk.statsbiblioteket.chaos.wowza.plugin.util.StringAndTextUtil;
 
-public class StatisticLoggingSBModuleBase extends ModuleBase implements IModuleOnApp, IModuleOnStream {
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 
-    private static String pluginName = "CHAOS Wowza plugin - Statistics SB";
-    private static String pluginVersion = "2.1.0 Database statistics";
+public class StatisticLoggingMCMModuleBase extends ModuleBase implements IModuleOnApp, IModuleOnStream {
+
+    private static String pluginName = "CHAOS Wowza plugin - Statistics MCM";
+    private static String pluginVersion = "2.1.0 MCM statistics";
 
     private static final String DATE_PATTERN = "yyyy-MM-dd HH:mm:ss.SSS";
     public static final SimpleDateFormat sdf = new SimpleDateFormat(DATE_PATTERN);
 
-    public StatisticLoggingSBModuleBase() {
+    public StatisticLoggingMCMModuleBase() {
         super();
     }
 
@@ -34,11 +34,11 @@ public class StatisticLoggingSBModuleBase extends ModuleBase implements IModuleO
         getLogger().info("onAppStart: VHost home path: " + appInstance.getVHost().getHomePath());
         appInstance.shutdown(true, true);
         PropertiesUtil.loadPropertiesMap(getLogger(), appInstance.getVHost().getHomePath());
-        if (StreamingDatabaseEventLogger.getInstance() == null) {
+        if (StreamingMCMEventLogger.getInstance() == null) {
             try {
-                StreamingDatabaseEventLogger.createInstance(getLogger(), appInstance.getVHost().getHomePath());
+                StreamingMCMEventLogger.createInstance(getLogger(), appInstance.getVHost().getHomePath());
             } catch (IOException e) {
-                throw new RuntimeException("Could not initialize StreamingDatabaseEventLogger.", e);
+                throw new RuntimeException("Could not initialize StreamingMCMEventLogger.", e);
             }
         }
         if (MCMPortalInterfaceStatisticsImpl.getInstance() == null) {
@@ -63,7 +63,7 @@ public class StatisticLoggingSBModuleBase extends ModuleBase implements IModuleO
         String statisticsParameter = StringAndTextUtil.extractValueFromQueryStringAndKey("statistics", queryString);
         if ((statisticsParameter == null) || (!statisticsParameter.equalsIgnoreCase("off"))) {
             IMediaStreamActionNotify streamActionNotify = new StatisticLoggingStreamListener(getLogger(), stream,
-                                                                                             StreamingDatabaseEventLogger
+                                                                                             StreamingMCMEventLogger
                                                                                                      .getInstance());
             WMSProperties props = stream.getProperties();
             synchronized (props) {
