@@ -42,7 +42,7 @@
 			<StorageDir></StorageDir>
 		</SharedObjects>
 		<Client>
-			<IdleFrequency>-1</IdleFrequency>
+		<IdleFrequency>-1</IdleFrequency>
 			<Access>
 				<StreamReadAccess>*</StreamReadAccess>
 				<StreamWriteAccess>*</StreamWriteAccess>
@@ -129,8 +129,8 @@
 			</Module>
 			<Module>
 				<Name>Chaos-SB-Logging</Name>
-				<Description>Statsbiblioteket Chaos logging module</Description>
-				<Class>dk.statsbiblioteket.chaos.wowza.plugin.statistic.StatisticLoggingSBModuleBase</Class>
+				<Description>Statsbiblioteket Chaos MCM logging module</Description>
+				<Class>dk.statsbiblioteket.chaos.wowza.plugin.statistic.StatisticLoggingMCMModuleBase</Class>
 			</Module>
 		</Modules>
 		<!-- Properties defined here will be added to the IApplication.getProperties() and IApplicationInstance.getProperties() collections -->
