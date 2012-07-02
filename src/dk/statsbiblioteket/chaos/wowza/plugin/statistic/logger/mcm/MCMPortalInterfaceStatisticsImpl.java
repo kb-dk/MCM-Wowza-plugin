@@ -1,4 +1,4 @@
-package dk.statsbiblioteket.chaos.wowza.plugin.statistic.logger;
+package dk.statsbiblioteket.chaos.wowza.plugin.statistic.logger.mcm;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

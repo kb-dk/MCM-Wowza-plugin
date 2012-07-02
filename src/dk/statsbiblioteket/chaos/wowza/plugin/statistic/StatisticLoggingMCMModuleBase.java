@@ -8,8 +8,8 @@ import com.wowza.wms.module.ModuleBase;
 import com.wowza.wms.stream.IMediaStream;
 import com.wowza.wms.stream.IMediaStreamActionNotify;
 
-import dk.statsbiblioteket.chaos.wowza.plugin.statistic.logger.MCMPortalInterfaceStatisticsImpl;
-import dk.statsbiblioteket.chaos.wowza.plugin.statistic.logger.StreamingMCMEventLogger;
+import dk.statsbiblioteket.chaos.wowza.plugin.statistic.logger.mcm.MCMPortalInterfaceStatisticsImpl;
+import dk.statsbiblioteket.chaos.wowza.plugin.statistic.logger.mcm.StreamingMCMEventLogger;
 import dk.statsbiblioteket.chaos.wowza.plugin.util.PropertiesUtil;
 import dk.statsbiblioteket.chaos.wowza.plugin.util.StringAndTextUtil;
 
@@ -32,14 +32,21 @@ public class StatisticLoggingMCMModuleBase extends ModuleBase implements IModule
     public void onAppStart(IApplicationInstance appInstance) {
         getLogger().info("onAppStart: " + pluginName + " version " + pluginVersion);
         getLogger().info("onAppStart: VHost home path: " + appInstance.getVHost().getHomePath());
-        appInstance.shutdown(true, true);
-        PropertiesUtil.loadPropertiesMap(getLogger(), appInstance.getVHost().getHomePath());
+        PropertiesUtil.loadProperties(getLogger(), appInstance.getVHost().getHomePath(),
+                                      new String[]{"GeneralMCMServerURL",
+                                              "StatisticsLoggingMCMStatisticsMethodCreateStatSession",
+                                              "StatisticsLoggingMCMValueClientSettingID",
+                                              "StatisticsLoggingMCMValueRepositoryID",
+                                              "StatisticsLoggingMCMStatisticsMethodCreateStatObjectSession",
+                                              "StatisticsLoggingMCMValueObjectTypeID",
+                                              "StatisticsLoggingMCMValueChannelTypeID",
+                                              "StatisticsLoggingMCMValueChannelIdentifier",
+                                              "StatisticsLoggingMCMValueObjectTitle",
+                                              "StatisticsLoggingMCMValueEventTypeID",
+                                              "StatisticsLoggingMCMValueObjectCollectionID",
+                                              "StatisticsLoggingMCMStatisticsMethodCreateDurationSession"});
         if (StreamingMCMEventLogger.getInstance() == null) {
-            try {
-                StreamingMCMEventLogger.createInstance(getLogger(), appInstance.getVHost().getHomePath());
-            } catch (IOException e) {
-                throw new RuntimeException("Could not initialize StreamingMCMEventLogger.", e);
-            }
+            StreamingMCMEventLogger.createInstance(getLogger());
         }
         if (MCMPortalInterfaceStatisticsImpl.getInstance() == null) {
             try {

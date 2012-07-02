@@ -1,7 +1,10 @@
-package dk.statsbiblioteket.chaos.wowza.plugin.statistic.logger;
+package dk.statsbiblioteket.chaos.wowza.plugin.statistic.logger.db;
 
 import com.wowza.wms.logging.WMSLogger;
 
+import dk.statsbiblioteket.chaos.wowza.plugin.statistic.logger.SessionIDPair;
+import dk.statsbiblioteket.chaos.wowza.plugin.statistic.logger.StreamingEventLoggerIF;
+import dk.statsbiblioteket.chaos.wowza.plugin.statistic.logger.StreamingStatLogEntry;
 import dk.statsbiblioteket.chaos.wowza.plugin.statistic.logger.StreamingStatLogEntry.Event;
 import dk.statsbiblioteket.chaos.wowza.plugin.util.PropertiesUtil;
 
@@ -31,17 +34,14 @@ public class StreamingDatabaseEventLogger implements StreamingEventLoggerIF {
 
     private static StreamingDatabaseEventLogger instance = null;
     private static Connection dbConnection = null;
+    private int session = 0;
 
     /**
      * Reads db connection information from property file and creates connection
      *
-     * @param logger
-     * @param vHostHomeDirPath
-     * @throws FileNotFoundException If property file could not be read
-     * @throws IOException           If property file could not be read
+     * @param logger The wowza logger.
      */
-    private StreamingDatabaseEventLogger(WMSLogger logger, String vHostHomeDirPath)
-            throws FileNotFoundException, IOException {
+    private StreamingDatabaseEventLogger(WMSLogger logger) {
         this.logger = logger;
         if (dbConnection == null) {
             this.jdbcDriverString = PropertiesUtil.getProperty(propertyStatisticsLoggingJDBCDriver);
@@ -89,20 +89,17 @@ public class StreamingDatabaseEventLogger implements StreamingEventLoggerIF {
                     "A parameter is null. " + "logger=" + logger + " " + "vHostHomeDirPath=" + vHostHomeDirPath);
         }
         if (instance == null) {
-            instance = new StreamingDatabaseEventLogger(logger, vHostHomeDirPath);
+            instance = new StreamingDatabaseEventLogger(logger);
         }
     }
 
-    public static synchronized StreamingEventLoggerIF getInstance() {
+    public static synchronized StreamingDatabaseEventLogger getInstance() {
         return instance;
     }
 
     @Override
-    public MCMPortalStreamingStatisticsSessionIDPair getStreamingLogSessionID(String mcmObjectID) {
-        String sessionID = MCMPortalInterfaceStatisticsImpl.getInstance().getStatisticsSession();
-        String objectSessionID = MCMPortalInterfaceStatisticsImpl.getInstance()
-                .getStatisticsObjectSession(sessionID, mcmObjectID);
-        return new MCMPortalStreamingStatisticsSessionIDPair(sessionID, objectSessionID);
+    public SessionIDPair getStreamingLogSessionID(String mcmObjectID) {
+        return new SessionIDPair(Integer.toString(session++), session + "-" + mcmObjectID);
     }
 
     @Override

@@ -2,7 +2,7 @@ package dk.statsbiblioteket.chaos.wowza.plugin.mockobjects;
 
 import com.wowza.wms.logging.WMSLogger;
 
-import dk.statsbiblioteket.chaos.wowza.plugin.statistic.logger.MCMPortalInterfaceStatistics;
+import dk.statsbiblioteket.chaos.wowza.plugin.statistic.logger.mcm.MCMPortalInterfaceStatistics;
 
 public class MCMPortalInterfaceStatisticsMock implements MCMPortalInterfaceStatistics {
 
@@ -10,8 +10,13 @@ public class MCMPortalInterfaceStatisticsMock implements MCMPortalInterfaceStati
 	
 	private int sessionID = 0;
 	private int sessionObjectID = 0;
-	
-	public MCMPortalInterfaceStatisticsMock(WMSLogger logger) {
+
+    public String lastSessionID;
+    public String lastObjectSessionID;
+    public long lastStartedAt;
+    public long lastEndedAt;
+
+    public MCMPortalInterfaceStatisticsMock(WMSLogger logger) {
 		super();
 		this.logger = logger;
 	}
@@ -35,7 +40,12 @@ public class MCMPortalInterfaceStatisticsMock implements MCMPortalInterfaceStati
 	public String logPlayDuration(String sessionID, String objectSessionID,
 			long startedAt, long endedAt) {
 		logger.info("logging: [" + sessionID + "-" + sessionObjectID + ": " + startedAt + "; " + endedAt + "]");
-		return "";
+		lastSessionID = sessionID;
+        lastObjectSessionID = objectSessionID;
+        lastStartedAt = startedAt;
+        lastEndedAt = endedAt;
+
+        return "";
 	}
 
 }

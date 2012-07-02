@@ -8,7 +8,7 @@ import com.wowza.wms.logging.WMSLogger;
 import com.wowza.wms.stream.IMediaStream;
 import com.wowza.wms.stream.IMediaStreamActionNotify2;
 
-import dk.statsbiblioteket.chaos.wowza.plugin.statistic.logger.MCMPortalStreamingStatisticsSessionIDPair;
+import dk.statsbiblioteket.chaos.wowza.plugin.statistic.logger.SessionIDPair;
 import dk.statsbiblioteket.chaos.wowza.plugin.statistic.logger.StreamingEventLoggerIF;
 import dk.statsbiblioteket.chaos.wowza.plugin.statistic.logger.StreamingStatLogEntry;
 import dk.statsbiblioteket.chaos.wowza.plugin.statistic.logger.StreamingStatLogEntry.Event;
@@ -21,8 +21,8 @@ public class StatisticLoggingStreamListener implements IMediaStreamActionNotify2
 
     private WMSLogger logger;
 	private StreamingEventLoggerIF streamingEventLogger;
-	private MCMPortalStreamingStatisticsSessionIDPair mcmStatSessionIDPair;
-	private String mcmObjectID;
+	private SessionIDPair sessionIDPair;
+    private String mcmObjectID;
 	private int clientID;
 	private Date lastStartTime;
 	private long lastStartLocation;
@@ -32,7 +32,7 @@ public class StatisticLoggingStreamListener implements IMediaStreamActionNotify2
 		this.streamingEventLogger = streamingEventLogger;
 		String queryString = String.valueOf(stream.getClient().getQueryStr());
 		this.mcmObjectID = StringAndTextUtil.extractValueFromQueryStringAndKey("ObjectID", queryString);
-		this.mcmStatSessionIDPair = streamingEventLogger.getStreamingLogSessionID(mcmObjectID);
+		this.sessionIDPair = streamingEventLogger.getStreamingLogSessionID(mcmObjectID);
 		this.clientID = stream.getClientId();
 		this.lastStartTime = null;
 		this.lastStartLocation = -1;
@@ -45,9 +45,9 @@ public class StatisticLoggingStreamListener implements IMediaStreamActionNotify2
 		long endedAt = startedAt;
 		StreamingStatLogEntry logEntry = new StreamingStatLogEntry(logger, 
 				streamName, 
-				clientID, 
-				mcmStatSessionIDPair.getSessionID(), 
-				mcmStatSessionIDPair.getObjectSessionID(),
+				clientID,
+				sessionIDPair.getSessionID(),
+				sessionIDPair.getObjectSessionID(),
 				startedAt,
 				endedAt,
 				Event.PLAY);
@@ -76,9 +76,9 @@ public class StatisticLoggingStreamListener implements IMediaStreamActionNotify2
 			long endedAt = Math.max((long) location, lastStartLocation);
 			StreamingStatLogEntry logEntry = new StreamingStatLogEntry(logger, 
 					stream.getName(), 
-					clientID, 
-					mcmStatSessionIDPair.getSessionID(), 
-					mcmStatSessionIDPair.getObjectSessionID(), 
+					clientID,
+					sessionIDPair.getSessionID(),
+					sessionIDPair.getObjectSessionID(),
 					startedAt,
 					endedAt,
 					event);
@@ -94,9 +94,9 @@ public class StatisticLoggingStreamListener implements IMediaStreamActionNotify2
 			long endedAt = (long) location;
 			StreamingStatLogEntry logEntry = new StreamingStatLogEntry(logger, 
 					stream.getName(), 
-					clientID, 
-					mcmStatSessionIDPair.getSessionID(), 
-					mcmStatSessionIDPair.getObjectSessionID(), 
+					clientID,
+					sessionIDPair.getSessionID(),
+					sessionIDPair.getObjectSessionID(),
 					startedAt,
 					endedAt,
 					event);
@@ -126,9 +126,9 @@ public class StatisticLoggingStreamListener implements IMediaStreamActionNotify2
 			long endedAt = startedAt + playDuration;
 			StreamingStatLogEntry logEntry = new StreamingStatLogEntry(logger, 
 					stream.getName(), 
-					clientID, 
-					mcmStatSessionIDPair.getSessionID(), 
-					mcmStatSessionIDPair.getObjectSessionID(), 
+					clientID,
+					sessionIDPair.getSessionID(),
+					sessionIDPair.getObjectSessionID(),
 					startedAt,
 					endedAt,
 					Event.REWIND);
@@ -140,9 +140,9 @@ public class StatisticLoggingStreamListener implements IMediaStreamActionNotify2
 			long endedAt = (long) location;
 			StreamingStatLogEntry logEntry = new StreamingStatLogEntry(logger, 
 					stream.getName(), 
-					clientID, 
-					mcmStatSessionIDPair.getSessionID(), 
-					mcmStatSessionIDPair.getObjectSessionID(), 
+					clientID,
+					sessionIDPair.getSessionID(),
+					sessionIDPair.getObjectSessionID(),
 					startedAt,
 					endedAt,
 					Event.SEEK);
@@ -174,9 +174,9 @@ public class StatisticLoggingStreamListener implements IMediaStreamActionNotify2
 		}
 		StreamingStatLogEntry logEntry = new StreamingStatLogEntry(logger, 
 				stream.getName(), 
-				clientID, 
-				mcmStatSessionIDPair.getSessionID(), 
-				mcmStatSessionIDPair.getObjectSessionID(), 
+				clientID,
+				sessionIDPair.getSessionID(),
+				sessionIDPair.getObjectSessionID(),
 				startedAt,
 				endedAt,
 				Event.STOP);

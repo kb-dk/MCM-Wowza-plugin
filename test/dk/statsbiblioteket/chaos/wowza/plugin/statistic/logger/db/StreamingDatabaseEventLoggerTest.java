@@ -1,4 +1,4 @@
-package dk.statsbiblioteket.chaos.wowza.plugin.statistic.logger;
+package dk.statsbiblioteket.chaos.wowza.plugin.statistic.logger.db;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -24,10 +24,14 @@ import com.wowza.wms.logging.WMSLoggerFactory;
 
 import dk.statsbiblioteket.chaos.wowza.plugin.mockobjects.IClientMock;
 import dk.statsbiblioteket.chaos.wowza.plugin.mockobjects.IMediaStreamMock;
+import dk.statsbiblioteket.chaos.wowza.plugin.mockobjects.MCMPortalInterfaceStatisticsMock;
 import dk.statsbiblioteket.chaos.wowza.plugin.statistic.StatisticLoggingStreamListener;
+import dk.statsbiblioteket.chaos.wowza.plugin.statistic.logger.mcm.MCMPortalInterfaceStatisticsImpl;
+import dk.statsbiblioteket.chaos.wowza.plugin.statistic.logger.StreamingEventLoggerIF;
+import dk.statsbiblioteket.chaos.wowza.plugin.statistic.logger.StreamingStatLogEntry;
 import dk.statsbiblioteket.chaos.wowza.plugin.statistic.logger.StreamingStatLogEntry.Event;
 
-public class StreamingMCMEventLoggerTest {
+public class StreamingDatabaseEventLoggerTest {
     private static final String DATE_PATTERN = "yyyy-MM-dd HH:mm:ss.SSS";
     public static final SimpleDateFormat sdf = new SimpleDateFormat(DATE_PATTERN);
 
@@ -35,7 +39,7 @@ public class StreamingMCMEventLoggerTest {
 	private Connection connection;
 	private StreamingEventLoggerIF streamingEventLogger;
 
-	public StreamingMCMEventLoggerTest() throws FileNotFoundException, IOException, SQLException {
+	public StreamingDatabaseEventLoggerTest() throws FileNotFoundException, IOException, SQLException {
 		super();
 		this.logger = WMSLoggerFactory.getLogger(this.getClass());
 		try {
@@ -46,8 +50,10 @@ public class StreamingMCMEventLoggerTest {
 	        return;
 	    }
 		this.connection = DriverManager.getConnection("jdbc:hsqldb:mem:streamingstats");
-		StreamingMCMEventLogger.createInstanceForTestPurpose(logger, connection);
-		this.streamingEventLogger = StreamingMCMEventLogger.getInstance();
+        synchronized (StreamingDatabaseEventLogger.class) {
+            StreamingDatabaseEventLogger.createInstanceForTestPurpose(logger, this.connection);
+        }
+        this.streamingEventLogger = StreamingDatabaseEventLogger.getInstance();
 	}
 
 	@Before
@@ -55,6 +61,7 @@ public class StreamingMCMEventLoggerTest {
 		org.apache.log4j.BasicConfigurator.configure();
 		IClient client = new IClientMock("sessionID=sample.mp4&objectID=643703&includeFiles=true");
 		IMediaStreamMock stream = new IMediaStreamMock("sample2.mp4", client);
+        MCMPortalInterfaceStatisticsImpl.createInstanceForTestPurpose(new MCMPortalInterfaceStatisticsMock(logger));
 		new StatisticLoggingStreamListener(logger, stream, streamingEventLogger);
 		createDBEventTable(logger, this.connection);
 	}

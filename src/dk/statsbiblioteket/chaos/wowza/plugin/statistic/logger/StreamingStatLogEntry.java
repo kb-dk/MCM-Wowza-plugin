@@ -32,10 +32,10 @@ public class StreamingStatLogEntry {
 	 * This constructor is used when creating a log entry.
 	 * 
 	 * Note the eventID is first set just before the log entry is persisted
-	 * 
+	 *
 	 * @param logger
-	 * @param endedAt 
-	 * @param startedAt 
+	 * @param endedAt
+	 * @param startedAt
 	 * @param stream
 	 * @param event
 	 */

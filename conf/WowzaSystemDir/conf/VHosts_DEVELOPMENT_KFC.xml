@@ -1,11 +1,6 @@
 <Root>
 	<VHosts>
 		<VHost>
-			<Name>_defaultVHost_</Name>
-			<ConfigDir>${com.wowza.wms.ConfigHome}</ConfigDir>
-			<ConnectionLimit>0</ConnectionLimit>
-		</VHost>
-		<VHost>
 			<Name>_chaosVHost_</Name>
 			<ConfigDir>/home/kfc/build/larm/services/wowza_vhost_chaos</ConfigDir>
 			<ConnectionLimit>0</ConnectionLimit>

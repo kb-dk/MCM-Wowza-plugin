@@ -11,7 +11,6 @@ import com.wowza.wms.request.*;
 import com.wowza.wms.stream.*;
 
 import dk.statsbiblioteket.chaos.wowza.plugin.authentication.model.MCMSessionAndFilenameValidater;
-import dk.statsbiblioteket.chaos.wowza.plugin.util.ConfigReader;
 
 
 public class WowzaSessionAuthenticationModuleBase extends ModuleBase 

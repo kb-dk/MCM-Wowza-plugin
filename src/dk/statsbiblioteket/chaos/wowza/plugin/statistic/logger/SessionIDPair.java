@@ -1,13 +1,12 @@
 package dk.statsbiblioteket.chaos.wowza.plugin.statistic.logger;
 
-public class MCMPortalStreamingStatisticsSessionIDPair {
+public class SessionIDPair {
 	
 	// ID pair for MCM statistics logging
 	public String sessionID;
 	public String objectSessionID;
 
-	public MCMPortalStreamingStatisticsSessionIDPair(String sessionID,
-			String objectSessionID) {
+	public SessionIDPair(String sessionID, String objectSessionID) {
 		this.sessionID = sessionID;
 		this.objectSessionID = objectSessionID;
 	}

@@ -11,8 +11,7 @@ import com.wowza.wms.module.ModuleBase;
 import com.wowza.wms.stream.IMediaStream;
 import com.wowza.wms.stream.IMediaStreamActionNotify;
 
-import dk.statsbiblioteket.chaos.wowza.plugin.statistic.logger.MCMPortalInterfaceStatisticsImpl;
-import dk.statsbiblioteket.chaos.wowza.plugin.statistic.logger.StreamingDatabaseEventLogger;
+import dk.statsbiblioteket.chaos.wowza.plugin.statistic.logger.db.StreamingDatabaseEventLogger;
 import dk.statsbiblioteket.chaos.wowza.plugin.util.PropertiesUtil;
 import dk.statsbiblioteket.chaos.wowza.plugin.util.StringAndTextUtil;
 
@@ -32,20 +31,14 @@ public class StatisticLoggingSBModuleBase extends ModuleBase implements IModuleO
     public void onAppStart(IApplicationInstance appInstance) {
         getLogger().info("onAppStart: " + pluginName + " version " + pluginVersion);
         getLogger().info("onAppStart: VHost home path: " + appInstance.getVHost().getHomePath());
-        appInstance.shutdown(true, true);
-        PropertiesUtil.loadPropertiesMap(getLogger(), appInstance.getVHost().getHomePath());
+        PropertiesUtil.loadProperties(getLogger(), appInstance.getVHost().getHomePath(),
+                                      new String[]{"StatisticsLoggingJDBCDriver", "StatisticsLoggingDBConnectionURL",
+                                              "StatisticsLoggingDBUser", "StatisticsLoggingDBPassword"});
         if (StreamingDatabaseEventLogger.getInstance() == null) {
             try {
                 StreamingDatabaseEventLogger.createInstance(getLogger(), appInstance.getVHost().getHomePath());
             } catch (IOException e) {
                 throw new RuntimeException("Could not initialize StreamingDatabaseEventLogger.", e);
-            }
-        }
-        if (MCMPortalInterfaceStatisticsImpl.getInstance() == null) {
-            try {
-                MCMPortalInterfaceStatisticsImpl.createInstance(getLogger(), appInstance.getVHost().getHomePath());
-            } catch (IOException e) {
-                throw new RuntimeException("Could not initialize MCMPortalInterfaceStatistics.", e);
             }
         }
     }
