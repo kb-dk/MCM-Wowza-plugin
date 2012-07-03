@@ -1,2 +1,0 @@
-The content library has to be here.
-If not, Wowza will create it with root access.
