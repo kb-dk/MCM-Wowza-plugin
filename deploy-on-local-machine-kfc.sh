@@ -19,5 +19,5 @@ echo - Start deploy script...
 bin/deploy.sh $WOWZA_SYSTEM_LIB $VHOST_LIB
 echo - Installing custom configuration
 if [ -e conf/examples/chaos/chaos-streaming-server-plugin_$ENVIRONMENT.properties ]; then cp conf/examples/chaos/chaos-streaming-server-plugin_$ENVIRONMENT.properties $VHOST_LIB/conf/chaos/chaos-streaming-server-plugin.properties; fi
-if [ -e conf/examples/chaos/Application_$ENVIRONMENT.xml ]; then cp conf/examples/chaos/Application_$ENVIRONMENT.xml $VHOST_LIB/conf/chaos/conf/examples/chaos/Application.xml; fi
+if [ -e conf/examples/chaos/Application_$ENVIRONMENT.xml ]; then cp conf/examples/chaos/Application_$ENVIRONMENT.xml $VHOST_LIB/conf/chaos/Application.xml; fi
 echo Done

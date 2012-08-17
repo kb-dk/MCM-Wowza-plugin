@@ -117,10 +117,15 @@
 				<Description>FLVPlayback</Description>
 				<Class>com.wowza.wms.module.ModuleFLVPlayback</Class>
 			</Module> 
-			<Module>
+			<!--Module>
 				<Name>Chaos-Authentication</Name>
 				<Description>Statsbiblioteket Chaos authentication module</Description>
 				<Class>dk.statsbiblioteket.chaos.wowza.plugin.authentication.WowzaSessionAuthenticationModuleBase</Class>
+			</Module-->
+			<Module>
+				<Name>Chaos-Authentication</Name>
+				<Description>Statsbiblioteket Chaos MCM2 authentication module</Description>
+				<Class>dk.statsbiblioteket.chaos.wowza.plugin.authentication.WowzaSessionAuthenticationMCM2ModuleBase</Class>
 			</Module>
 			<Module>
 				<Name>Chaos-BES-Filemapping</Name>
@@ -132,11 +137,11 @@
 				<Description>Statsbiblioteket Chaos database logging module</Description>
 				<Class>dk.statsbiblioteket.chaos.wowza.plugin.statistic.StatisticLoggingSBModuleBase</Class>
 			</Module>
-			<Module>
+			<!--Module>
 				<Name>Chaos-MCM-Logging</Name>
 				<Description>Statsbiblioteket Chaos MCM logging module</Description>
 				<Class>dk.statsbiblioteket.chaos.wowza.plugin.statistic.StatisticLoggingMCMModuleBase</Class>
-			</Module>
+			</Module-->
 		</Modules>
 		<!-- Properties defined here will be added to the IApplication.getProperties() and IApplicationInstance.getProperties() collections -->
 		<Properties>
