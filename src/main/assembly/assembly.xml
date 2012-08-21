@@ -2,12 +2,13 @@
     <id>bundle</id>
 
     <formats>
-        <format>zip</format>
+        <format>tar.gz</format>
     </formats>
 
     <dependencySets>
         <dependencySet>
             <outputDirectory>lib</outputDirectory>
+            <directoryMode>0775</directoryMode>
             <useTransitiveDependencies>true</useTransitiveDependencies>
             <scope>runtime</scope>
         </dependencySet>
@@ -17,10 +18,12 @@
         <fileSet>
             <outputDirectory>conf</outputDirectory>
             <directory>conf</directory>
+            <directoryMode>0775</directoryMode>
         </fileSet>
         <fileSet>
             <outputDirectory>bin</outputDirectory>
             <directory>src/main/scripts</directory>
+            <directoryMode>0775</directoryMode>
             <fileMode>0755</fileMode>
         </fileSet>
     </fileSets>
